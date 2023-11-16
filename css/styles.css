@@ -2,7 +2,17 @@
    Public API Request
 ======================================== */
 
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@font-face {
+  font-family: "Ubuntu";
+  font-weight: 400;
+  src: url("../assets/fonts/Ubuntu-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Ubuntu";
+  font-weight: 700;
+  src: url("../assets/fonts/Ubuntu-Bold.ttf");
+}
 
 * {
 	box-sizing: border-box;
@@ -14,7 +24,7 @@ html, body {
 }
 
 body {
-    font-family: "Nunito", sans-serif;
+    font-family: "Ubuntu", sans-serif;
     text-align: center;
     background: rgba(235, 235, 235, 0.9);
 }
