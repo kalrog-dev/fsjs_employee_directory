@@ -23,7 +23,7 @@ let userData;
 function displayUsers(users, insertTarget = document.getElementById("gallery")) {
   if (!insertTarget) return;
   let html = "";
-  users.forEach(({ name: { first: firstName, last: lastName }, email, picture: { large: img }, location: { city, state } }) => {
+  users.forEach(({ name: { first: firstName, last: lastName }, email, picture: { large: img }, location: { state } }) => {
     html += 
       `<div class="card">
         <div class="card-img-container">
@@ -32,7 +32,7 @@ function displayUsers(users, insertTarget = document.getElementById("gallery")) 
         <div class="card-info-container">
           <h3 id="name" class="card-name cap">${firstName} ${lastName}</h3>
           <p class="card-text">${email}</p>
-          <p class="card-text cap">${city}, ${state}</p>
+          <p class="card-text cap">${state}</p>
         </div>
       </div>`
   });
