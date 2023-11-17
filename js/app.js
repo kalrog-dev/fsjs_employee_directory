@@ -4,21 +4,23 @@
  * {@link https://github.com/kalrog-dev}
  */
 
-// Fetch user data from an API
+// Fetch user data from an API.
 fetch("https://randomuser.me/api/?results=12&nat=de&gender=female")
   .then(res => res.json())
   .then(data => data.results)
-  .then(displayUsers)
+  .then(users => userData = displayUsers(users))
   .catch(err => alert(err));
 
 /**
  * Destructure user data, build html and inject it into gallery.
- * @param {object[]} data - Fetched user data.
- * @returns {void}
+ * @param {object[]} users - Fetched user data.
+ * @param {?HTMLDivElement} insertTarget - Element the html should get inserted into.
+ * @returns {object[]} Fetched user data.
  */
-function displayUsers(data) {
+function displayUsers(users, insertTarget = document.getElementById("gallery")) {
+  if (!insertTarget) return;
   let html = "";
-  data.forEach(({ name: { first: firstName, last: lastName }, email, picture: { large: img }, location: { city, state } }) => {
+  users.forEach(({ name: { first: firstName, last: lastName }, email, picture: { large: img }, location: { city, state } }) => {
     html += 
       `<div class="card">
         <div class="card-img-container">
@@ -31,5 +33,52 @@ function displayUsers(data) {
         </div>
       </div>`
   });
-  document.getElementById("gallery").innerHTML = html;
+  insertTarget.innerHTML = html;
+  return users;
+}
+
+// Store the fetched data globally.
+let userData;
+
+// Click event listener for the gallery.
+document.getElementById("gallery")?.addEventListener("click", handleGalleryClick);
+
+// Handle gallery click.
+function handleGalleryClick({ target }) {
+  // Check if the click event bubbled up from an employee card.
+  if (target?.closest(".card")) {
+    // Get index of the clicked card
+    const targetCard = target.closest(".card");
+    const cards = document.querySelectorAll(".card");
+    const userIndex = [...cards].indexOf(targetCard);
+
+    // Destructure the clicked user's data
+    const { 
+      location: { city, state, postcode, street: { name: streetName, number: streetNum } },
+      name: { first: firstName, last: lastName },
+      picture: { large: img },
+      email,
+      cell: phoneNum,
+      dob: { date: dob }
+    } = userData[userIndex];
+
+    const html =
+        `<div class="modal-container">
+          <div class="modal">
+            <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+            <div class="modal-info-container">
+              <img class="modal-img" src=${img} alt="profile picture">
+              <h3 id="name" class="modal-name cap">${firstName} ${lastName}</h3>
+              <p class="modal-text">${email}</p>
+              <p class="modal-text cap">${city}</p>
+              <hr>
+              <p class="modal-text">${phoneNum}</p>
+              <p class="modal-text">${streetNum} ${streetName}, ${city}, ${postcode}</p>
+              <p class="modal-text">Birthday: ${dob}</p>
+            </div>
+          </div>
+        </div>`
+
+    document.body.insertAdjacentHTML("beforeend", html);
+  }
 }
