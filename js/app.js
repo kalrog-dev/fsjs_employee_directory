@@ -1,5 +1,5 @@
 /**
- * @file Requests a JSON object from an API, parses the data and displays it in a grid.
+ * @file Requests a JSON object from an API, parses and displays the data.
  * @author Michal Veselka
  * {@link https://github.com/kalrog-dev}
  */
@@ -10,6 +10,9 @@ fetch("https://randomuser.me/api/?results=12&nat=de&gender=female")
   .then(data => data.results)
   .then(users => userData = displayUsers(users))
   .catch(err => alert(err));
+
+// Store the fetched data globally.
+let userData;
 
 /**
  * Destructure user data, build html and inject it into gallery.
@@ -37,13 +40,14 @@ function displayUsers(users, insertTarget = document.getElementById("gallery")) 
   return users;
 }
 
-// Store the fetched data globally.
-let userData;
-
 // Click event listener for the gallery.
 document.getElementById("gallery")?.addEventListener("click", handleGalleryClick);
 
-// Handle gallery click.
+/**
+ * Display a modal for the selected card.
+ * @param {object} event - The event object. 
+ * @returns {void}
+ */
 function handleGalleryClick({ target }) {
   // Check if the click event bubbled up from an employee card.
   if (target?.closest(".card")) {
@@ -61,7 +65,7 @@ function handleGalleryClick({ target }) {
       dob: { date },
       cell: phoneNum
     } = userData[userIndex];
-    const dob = /\d{4}-\d{2}-\d{2}/.exec(date)[0];
+    const dob = /\d{4}(-\d{2}){2}/.exec(date)[0];
 
     const html =
       `<div class="modal-container">
@@ -79,18 +83,21 @@ function handleGalleryClick({ target }) {
           </div>
         </div>
       </div>`
-
     document.body?.insertAdjacentHTML("beforeend", html);
 
-    // Close modal by clicking outside of the modal window or by clicking the close button.
-    document.querySelector(".modal-container")?.addEventListener("click", closeModal);
+    // Close modal on click.
+    document.querySelector(".modal-container")?.addEventListener("click", handleModalClick);
+  }
+}
 
-    function closeModal({ target }) {
-      // If user clicked outside of the modal window.
-      if (!target.closest(".modal") || target.closest("#modal-close-btn")) {
-        document.querySelector(".modal-container")?.removeEventListener("click", closeModal);
-        document.querySelector(".modal-container")?.remove();
-      }
-    }
+/**
+ * Close modal by clicking outside of the modal window or by clicking the close button.
+ * @param {object} event - The event object. 
+ * @returns {void}
+ */
+function handleModalClick({ target }) {
+  if (!target?.closest(".modal") || target?.closest("#modal-close-btn")) {
+    document.querySelector(".modal-container")?.removeEventListener("click", handleModalClick);
+    document.querySelector(".modal-container")?.remove();
   }
 }
