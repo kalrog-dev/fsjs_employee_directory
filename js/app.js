@@ -15,9 +15,9 @@ fetch("https://randomuser.me/api/?results=12&nat=de&gender=female")
 let userData;
 
 /**
- * Destructure user data, build html and inject it into gallery.
+ * Destructure user data and inject user cards into the gallery.
  * @param {object[]} users - Fetched user data.
- * @param {?HTMLDivElement} insertTarget - Element the html should get inserted into.
+ * @param {?HTMLDivElement} insertTarget - An element the html should get inserted into.
  * @returns {object[]} Fetched user data.
  */
 function displayUsers(users, insertTarget = document.getElementById("gallery")) {
@@ -50,9 +50,9 @@ document.getElementById("gallery")?.addEventListener("click", handleGalleryClick
  * @returns {void}
  */
 function handleGalleryClick({ target }) {
-  // Check if the click event bubbled up from an employee card.
+  // Check if the click event bubbled up from a card.
   if (target?.closest(".card")) {
-    // Get an index of the clicked card, then use it to destructure its data.
+    // Get an index of the clicked card and use it to destructure its data.
     const targetCard = target.closest(".card");
     const cards = document.querySelectorAll(".card");
     const userIndex = [...cards].indexOf(targetCard);
@@ -91,7 +91,7 @@ function handleGalleryClick({ target }) {
 }
 
 /**
- * Close a modal by clicking outside of the modal window or by clicking the close button.
+ * Close a modal by clicking outside of the window or by clicking the close button.
  * @param {object} event - The event object.
  * @param {?HTMLElement} event.target - The event target.
  * @returns {void}
