@@ -45,7 +45,8 @@ document.getElementById("gallery")?.addEventListener("click", handleGalleryClick
 
 /**
  * Display a modal for the selected card.
- * @param {object} event - The event object. 
+ * @param {object} event - The event object.
+ * @param {?HTMLElement} event.target - The event target.
  * @returns {void}
  */
 function handleGalleryClick({ target }) {
@@ -91,7 +92,8 @@ function handleGalleryClick({ target }) {
 
 /**
  * Close a modal by clicking outside of the modal window or by clicking the close button.
- * @param {object} event - The event object. 
+ * @param {object} event - The event object.
+ * @param {?HTMLElement} event.target - The event target.
  * @returns {void}
  */
 function handleModalClick({ target }) {
