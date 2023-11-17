@@ -47,38 +47,50 @@ document.getElementById("gallery")?.addEventListener("click", handleGalleryClick
 function handleGalleryClick({ target }) {
   // Check if the click event bubbled up from an employee card.
   if (target?.closest(".card")) {
-    // Get index of the clicked card
+    // Get index of the clicked card.
     const targetCard = target.closest(".card");
     const cards = document.querySelectorAll(".card");
     const userIndex = [...cards].indexOf(targetCard);
 
-    // Destructure the clicked user's data
+    // Destructure the clicked user's data.
     const { 
-      location: { city, state, postcode, street: { name: streetName, number: streetNum } },
+      email,
+      location: { city, postcode, street: { name: streetName, number: streetNum } },
       name: { first: firstName, last: lastName },
       picture: { large: img },
-      email,
-      cell: phoneNum,
-      dob: { date: dob }
+      dob: { date },
+      cell: phoneNum
     } = userData[userIndex];
+    const dob = /\d{4}-\d{2}-\d{2}/.exec(date)[0];
 
     const html =
-        `<div class="modal-container">
-          <div class="modal">
-            <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-            <div class="modal-info-container">
-              <img class="modal-img" src=${img} alt="profile picture">
-              <h3 id="name" class="modal-name cap">${firstName} ${lastName}</h3>
-              <p class="modal-text">${email}</p>
-              <p class="modal-text cap">${city}</p>
-              <hr>
-              <p class="modal-text">${phoneNum}</p>
-              <p class="modal-text">${streetNum} ${streetName}, ${city}, ${postcode}</p>
-              <p class="modal-text">Birthday: ${dob}</p>
-            </div>
+      `<div class="modal-container">
+        <div class="modal">
+          <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+          <div class="modal-info-container">
+            <img class="modal-img" src=${img} alt="profile picture">
+            <h3 id="name" class="modal-name cap">${firstName} ${lastName}</h3>
+            <p class="modal-text">${email}</p>
+            <p class="modal-text cap">${city}</p>
+            <hr>
+            <p class="modal-text">${phoneNum}</p>
+            <p class="modal-text">${streetNum} ${streetName}, ${city}, ${postcode}</p>
+            <p class="modal-text">Birthday: ${dob}</p>
           </div>
-        </div>`
+        </div>
+      </div>`
 
-    document.body.insertAdjacentHTML("beforeend", html);
+    document.body?.insertAdjacentHTML("beforeend", html);
+
+    // Close modal by clicking outside of the modal window or by clicking the close button.
+    document.querySelector(".modal-container")?.addEventListener("click", closeModal);
+
+    function closeModal({ target }) {
+      // If user clicked outside of the modal window.
+      if (!target.closest(".modal") || target.closest("#modal-close-btn")) {
+        document.querySelector(".modal-container")?.removeEventListener("click", closeModal);
+        document.querySelector(".modal-container")?.remove();
+      }
+    }
   }
 }
