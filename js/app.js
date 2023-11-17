@@ -4,20 +4,21 @@
  * {@link https://github.com/kalrog-dev}
  */
 
-// Fetch data from an API
-let fetchedData;
-const url = `https://randomuser.me/api/?results=12&nat=de&gender=female`;
-fetch(url)
+// Fetch user data from an API
+fetch("https://randomuser.me/api/?results=12&nat=de&gender=female")
   .then(res => res.json())
   .then(data => data.results)
   .then(displayUsers)
   .catch(err => alert(err));
 
-// Display image, fullname, email, city/location
+/**
+ * Destructure user data, build html and inject it into gallery.
+ * @param {object[]} data - Fetched user data.
+ * @returns {void}
+ */
 function displayUsers(data) {
-  let html = `<div>`;
-  data.forEach(user => {
-    const { name: { first: firstName, last: lastName }, email, picture: { large: img }, location: { city, state } } = user;
+  let html = "";
+  data.forEach(({ name: { first: firstName, last: lastName }, email, picture: { large: img }, location: { city, state } }) => {
     html += 
       `<div class="card">
         <div class="card-img-container">
@@ -30,8 +31,5 @@ function displayUsers(data) {
         </div>
       </div>`
   });
-  html += `</div>`;
-
-  // Inject html
   document.getElementById("gallery").innerHTML = html;
 }
