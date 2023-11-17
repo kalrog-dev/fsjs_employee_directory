@@ -51,12 +51,11 @@ document.getElementById("gallery")?.addEventListener("click", handleGalleryClick
 function handleGalleryClick({ target }) {
   // Check if the click event bubbled up from an employee card.
   if (target?.closest(".card")) {
-    // Get index of the clicked card.
+    // Get an index of the clicked card, then use it to destructure its data.
     const targetCard = target.closest(".card");
     const cards = document.querySelectorAll(".card");
     const userIndex = [...cards].indexOf(targetCard);
 
-    // Destructure the clicked user's data.
     const { 
       email,
       location: { city, postcode, street: { name: streetName, number: streetNum } },
@@ -85,13 +84,13 @@ function handleGalleryClick({ target }) {
       </div>`
     document.body?.insertAdjacentHTML("beforeend", html);
 
-    // Close modal on click.
+    // Close the modal on click.
     document.querySelector(".modal-container")?.addEventListener("click", handleModalClick);
   }
 }
 
 /**
- * Close modal by clicking outside of the modal window or by clicking the close button.
+ * Close a modal by clicking outside of the modal window or by clicking the close button.
  * @param {object} event - The event object. 
  * @returns {void}
  */
