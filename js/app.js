@@ -4,15 +4,29 @@
  * {@link https://github.com/kalrog-dev}
  */
 
-// Fetch user data from an API.
-fetch("https://randomuser.me/api/?results=12&nat=de&gender=female")
-  .then(res => res.json())
-  .then(data => data.results)
-  .then(users => userData = displayUsers(users))
-  .catch(err => alert(err));
+async function fetchJSON(apiUrl) {
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error("Something went wrong.");
+    return await response.json();
+  } catch (error) {
+    alert(error);
+  } 
+}
+
+async function renderUsers() {
+  try {
+    const apiUrl = "https://randomuser.me/api/?results=12&nat=de&gender=female";
+    userData = await fetchJSON(apiUrl);
+    injectUsers(userData.results)
+  } catch (error) {
+    alert(error);
+  }
+}
 
 // Store the fetched data globally.
 let userData;
+renderUsers();
 
 /**
  * Destructure user data and inject user cards into the gallery.
@@ -20,7 +34,7 @@ let userData;
  * @param {?HTMLDivElement} insertTarget - An element the html should get inserted into.
  * @returns {object[]} Fetched user data.
  */
-function displayUsers(users, insertTarget = document.getElementById("gallery")) {
+function injectUsers(users, insertTarget = document.getElementById("gallery")) {
   if (!insertTarget) return;
   let html = "";
   users.forEach(({ name: { first: firstName, last: lastName }, email, picture: { large: img }, location: { state } }) => {
