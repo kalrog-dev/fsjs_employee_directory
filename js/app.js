@@ -17,14 +17,15 @@ async function fetchJSON(apiUrl) {
 async function renderUsers() {
   try {
     const apiUrl = "https://randomuser.me/api/?results=12&nat=de&gender=female";
-    userData = await fetchJSON(apiUrl);
-    injectUsers(userData.results)
+    const data = await fetchJSON(apiUrl);
+    userData = data.results
+    injectUsers(userData);
   } catch (error) {
     alert(error);
   }
 }
 
-// Store the fetched data globally.
+// Store the fetched data globally and render users.
 let userData;
 renderUsers();
 
